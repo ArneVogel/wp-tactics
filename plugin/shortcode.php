@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Listudy Chess Tactics
- * Plugin URI: https://github.com/arnevogel
+ * Plugin URI: https://github.com/ArneVogel/wp-tactics
  * Description: Add chess tactics to your posts with shortcodes
  * Version: 0.1
  * Text Domain: chess-puzzle
