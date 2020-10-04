@@ -14,17 +14,16 @@
     $moves = empty($atts["moves"]) ? 'e4 e5 Ke2' : $atts["moves"];
     $color = empty($atts["color"]) ? 'white' : $atts["color"];
     $last_move = empty($atts["last_move"]) ? '' : $atts["last_move"];
-    $width= empty($atts["width"]) ? '400' : $atts["width"];
-
+    $width = empty($atts["width"]) ? '400' : $atts["width"];
+    $board_bg = empty($atts["board_bg"]) ? 'blue' : $atts["board_bg"];
 
 	$Content = "<iframe style=\"width:". $width ."px;\" frameborder=0 height='". ($width+80) ."' width='". $width ."' srcdoc='
 <!DOCTYPE html>
-<html>
+<html class=&quot;". $board_bg ." cburnett&quot;>
   <head>
     <meta charset=&quot;utf-8&quot;/>
     <meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;/>
     <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/>
-    <title>Listudy</title>
     <link rel=&quot;stylesheet&quot; href=&quot;". plugins_url( 'static/chessground.css' , __FILE__ ) ."&quot; />
 <script>
 window.sound_enabled = false;
@@ -35,12 +34,11 @@ window.sound_enabled = false;
 }
 </style>
   </head>
-
   <body>
 <main role=&quot;main&quot; class=&quot;container&quot;>
 <div class=&quot;with_sidebar&quot;>
   <div id=&quot;game_container&quot; class=&quot;sidebar_main&quot;>
-    <div class=&quot;chessboard cg-wrap cg-board-wrap orientation-white manipulable blue cburnett&quot; id=&quot;chessground&quot;></div>
+    <div class=&quot;chessboard cg-wrap cg-board-wrap orientation-white manipulable &quot; id=&quot;chessground&quot;></div>
   </div>
   <p>
   <span id=&quot;to_win&quot;><span id=&quot;color_span&quot;></span> to move and win!</span>
