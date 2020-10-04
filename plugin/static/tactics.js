@@ -307,6 +307,7 @@ function resize_ground() {
   var gc = document.getElementById("game_container");
   var gc_width = gc.offsetWidth;
   var width = gc_width - 7; // for the numbers on the side of the ground
+  width -= width % 8;
 
   width = "" + width + "px";
   var chessground = document.getElementById("chessground");
