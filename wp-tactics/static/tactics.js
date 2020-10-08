@@ -731,6 +731,7 @@ function _handle_move() {
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_set_moves"])();
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_move"])(_m, chess);
             _context.next = 20;
+            my_set_text(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["success_div"], "Best Move! Keep going...");
             break;
 
           case 16:
