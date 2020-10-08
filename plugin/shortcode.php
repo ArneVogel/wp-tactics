@@ -17,6 +17,7 @@
     $width = empty($atts["width"]) ? '400' : $atts["width"];
     $board_bg = empty($atts["board_bg"]) ? 'blue' : $atts["board_bg"];
     $css = empty($atts["css"]) ? 'empty' : '<link rel=&quot;stylesheet&quot; href=&quot;' . $atts["css"] . '&quot; />';
+    $credit = empty($atts["nocredit"]) ? '<span class=&quot;float_right&quot;>Powered by: <a target=&quot;_blank&quot; rel=&quot;noopener&quot; href=&quot;https://listudy.org/en&quot;>listudy.org</a></span>' : '';
 
 	$Content = "<iframe style=\"width:". $width ."px;\" frameborder=0 height='". ($width+80) ."' width='". $width ."' srcdoc='
 <!DOCTYPE html>
@@ -44,7 +45,7 @@ window.sound_enabled = false;
   </div>
   <p>
   <span id=&quot;to_win&quot;><span id=&quot;color_span&quot;></span> to move and win!</span>
-  <span class=&quot;float_right&quot;>Powered by: <a target=&quot;_blank&quot; rel=&quot;noopener&quot; href=&quot;https://listudy.org/en&quot;>listudy.org</a></span>
+    ". $credit . "
   </p>
 </div>
 

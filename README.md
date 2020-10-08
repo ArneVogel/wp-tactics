@@ -12,7 +12,7 @@ Example usage:
 `[tactic fen="r3k3/pppb4/6N1/3Pp3/N3n2b/8/PP1P2PP/R1B2K1R b q - 0 17" last_move="h8g6" moves="Bb5+ d3 Bxd3+ Kg1 Bf2#" color="black" width="500" board_bg="brown" css="/styles/tactics.css"]`
 
 Required parameters: `fen, moves, color`,
-optional parameters: `last_move, width, board_bg, css`
+optional parameters: `last_move, width, board_bg, css, nocredit`
 
 * `fen` any possible position as fen.
 * `moves` chess moves that solve the tactic in san notation, case sensitive.
@@ -21,3 +21,4 @@ optional parameters: `last_move, width, board_bg, css`
 * `width` the width the chessboard should have in pixels, example `400` for a 400px big board, dont add the `px` yourself.
 * `board_bg` the background color the board should have, possible values: `brown, blue, green, ic`, default `blue`.
 * `css` link to a css file to be included in the iframe. Used for styling the contents of the iframe without editing the plugin files.
+* `nocredit` set to any value removes the "Powered by listudy.org" credit :(
