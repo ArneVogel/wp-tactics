@@ -16,6 +16,7 @@
     $last_move = empty($atts["last_move"]) ? '' : $atts["last_move"];
     $width = empty($atts["width"]) ? '400' : $atts["width"];
     $board_bg = empty($atts["board_bg"]) ? 'blue' : $atts["board_bg"];
+    $css = empty($atts["css"]) ? 'empty' : '<link rel=&quot;stylesheet&quot; href=&quot;' . $atts["css"] . '&quot; />';
 
 	$Content = "<iframe style=\"width:". $width ."px;\" frameborder=0 height='". ($width+80) ."' width='". $width ."' srcdoc='
 <!DOCTYPE html>
@@ -25,6 +26,7 @@
     <meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;/>
     <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/>
     <link rel=&quot;stylesheet&quot; href=&quot;". plugins_url( 'static/chessground.css' , __FILE__ ) ."&quot; />
+    ". $css ."
 <script>
 window.sound_enabled = false;
 </script>
