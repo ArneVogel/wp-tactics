@@ -748,7 +748,9 @@ function _handle_move() {
             // player got the puzzle correct
             solves = localStorage.getItem("achievements_tactics_solved") || 0;
             localStorage.setItem("achievements_tactics_solved", Number(solves) + 1);
-            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["success_div"], i18n.success);
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["success_div"], " ", {
+              bold: i18n.success
+            });
             show_div("next");
 
           case 22:
@@ -764,7 +766,9 @@ function _handle_move() {
             to_play.unshift(target);
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_undo_last_move"])();
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_set_moves"])();
-            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["error_div"], i18n.wrong_move);
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["error_div"], i18n.keep_trying, {
+              bold: i18n.wrong_move
+            });
             show_div("next");
             show_div("solution");
 

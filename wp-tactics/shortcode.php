@@ -84,10 +84,11 @@ let i18n = {
     &quot;share_on&quot;: &quot;Share on&quot;
 };
 i18n.success = &quot;Tactic solved!&quot;;
-i18n.wrong_move = &quot;Wrong Move&quot;;
+i18n.wrong_move = &quot;Wrong Move.&quot;;
 i18n.best_move = &quot;Best Move!&quot;;
 i18n.keep_going = &quot;Keep going...&quot;;
 i18n.your_turn = &quot;Your turn.&quot;;
+i18n.keep_trying = &quot;Keep trying!&quot;;
 i18n.find_the_best_white = &quot;Find the best move for white.&quot;;
 i18n.find_the_best_black = &quot;Find the best move for black.&quot;;
 </script>
