@@ -16,7 +16,7 @@
     $last_move = empty($atts["last_move"]) ? '' : $atts["last_move"];
     $width = empty($atts["width"]) ? '400' : $atts["width"];
     $board_bg = empty($atts["board_bg"]) ? 'blue' : $atts["board_bg"];
-    $css = empty($atts["css"]) ? 'empty' : '<link rel=&quot;stylesheet&quot; href=&quot;' . $atts["css"] . '&quot; />';
+    $css = empty($atts["css"]) ? '' : '<link rel=&quot;stylesheet&quot; href=&quot;' . $atts["css"] . '&quot; />';
     $credit = empty($atts["nocredit"]) ? '<span class=&quot;float_right&quot;>Powered by: <a target=&quot;_blank&quot; rel=&quot;noopener&quot; href=&quot;https://listudy.org/en&quot;>listudy.org</a></span>' : '';
 
 	$Content = "<iframe style=\"width:". $width ."px;\" frameborder=0 height='". ($width+80) ."' width='". $width ."' srcdoc='
@@ -35,16 +35,45 @@ window.sound_enabled = false;
 .float_right {
     float: right;
 }
+.hidden {
+    display: none;
+}
 </style>
   </head>
   <body>
+<form class=&quot;hidden&quot;>
+<input type=&quot;text&quot; id=&quot;fen&quot; value=&quot;". $fen ."&quot;>
+<input type=&quot;text&quot; id=&quot;color&quot; value=&quot;". $color ."&quot;>
+<input type=&quot;text&quot; id=&quot;moves&quot; value=&quot;". $moves ."&quot;>
+<input type=&quot;text&quot; id=&quot;last_move&quot; value=&quot;". $last_move ."&quot;>
+</form>
 <main role=&quot;main&quot; class=&quot;container&quot;>
 <div class=&quot;with_sidebar&quot;>
   <div id=&quot;game_container&quot; class=&quot;sidebar_main&quot;>
     <div class=&quot;chessboard cg-wrap cg-board-wrap orientation-white manipulable &quot; id=&quot;chessground&quot;></div>
   </div>
   <p>
-  <span id=&quot;to_win&quot;><span id=&quot;color_span&quot;></span> to move and win!</span>
+<div>
+  <span id=&quot;success&quot; class=&quot;hidden&quot;>
+    <span id=&quot;success_symbol&quot;></span>
+    <b id=&quot;success_bold&quot;></b>
+    <span id=&quot;success_text&quot;></span>
+  </span>
+</div>
+<div>
+  <span id=&quot;info&quot; class=&quot;hidden&quot;>
+    <span id=&quot;info_symbol&quot;></span>
+    <b id=&quot;info_bold&quot;></b>
+    <span id=&quot;info_text&quot;></span>
+  </span>
+</div>
+<div>
+  <span id=&quot;error&quot; class=&quot;hidden&quot;>
+    <span id=&quot;error_symbol&quot;></span>
+    <b id=&quot;error_bold&quot;></b>
+    <span id=&quot;error_text&quot;></span>
+  </span>
+</div>
     ". $credit . "
   </p>
 </div>
@@ -54,13 +83,13 @@ window.sound_enabled = false;
 let i18n = {
     &quot;share_on&quot;: &quot;Share on&quot;
 };
-fen = &quot;". $fen."&quot;;
-color = &quot;". $color."&quot;;
-moves = &quot;". $moves."&quot;;
-last_move = &quot;". $last_move."&quot;;
-document.getElementById(&quot;color_span&quot;).innerText = color.charAt(0).toUpperCase() + color.slice(1);
-i18n.success = &quot;Tactic solved&quot;;
+i18n.success = &quot;Tactic solved!&quot;;
 i18n.wrong_move = &quot;Wrong Move&quot;;
+i18n.best_move = &quot;Best Move!&quot;;
+i18n.keep_going = &quot;Keep going...&quot;;
+i18n.your_turn = &quot;Your turn.&quot;;
+i18n.find_the_best_white = &quot;Find the best move for white.&quot;;
+i18n.find_the_best_black = &quot;Find the best move for black.&quot;;
 </script>
 
     </main>

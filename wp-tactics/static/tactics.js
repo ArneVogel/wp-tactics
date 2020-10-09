@@ -307,7 +307,8 @@ function resize_ground() {
   var gc = document.getElementById("game_container");
   var gc_width = gc.offsetWidth;
   var width = gc_width - 7; // for the numbers on the side of the ground
-  width -= width % 8;
+
+  width -= width % 8; // fix chrome alignment errors; https://github.com/ornicar/lila/pull/3881
 
   width = "" + width + "px";
   var chessground = document.getElementById("chessground");
@@ -505,7 +506,12 @@ function clear_all_text() {
 }
 
 function set_text(id, text) {
+  var extra = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+    bold_text: "",
+    symbol: ""
+  };
   var div = document.getElementById(id);
+  var prefix_symbol = "";
 
   if (div == null) {
     return;
@@ -516,19 +522,23 @@ function set_text(id, text) {
 
     switch (id) {
       case success_div:
-        text = "✓ " + text;
+        prefix_symbol = "✓";
         break;
 
       case info_div:
-        text = "🛈 " + text;
+        prefix_symbol = "🛈";
         break;
 
       case error_div:
-        text = "✕ " + text;
+        prefix_symbol = "✕";
         break;
 
       default:
         break;
+    }
+
+    if (extra.symbol != undefined && extra.symbol != "") {
+      prefix_symbol = extra.symbol;
     }
   } else {
     div.classList.add("hidden");
@@ -538,7 +548,17 @@ function set_text(id, text) {
   // https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html#rule-6-populate-the-dom-using-safe-javascript-functions-or-properties
 
 
-  div.textContent = text;
+  set_text_content(id + "_text", text);
+  set_text_content(id + "_symbol", prefix_symbol);
+  set_text_content(id + "_bold", extra.bold);
+}
+
+function set_text_content(id, content) {
+  var element = document.getElementById(id);
+
+  if (element != null) {
+    element.textContent = content;
+  }
 }
 
 
@@ -586,8 +606,12 @@ var Sounds = /*#__PURE__*/function () {
     _classCallCheck(this, Sounds);
 
     var ground_sources = {
+      move: "/sounds/standard/Move.mp3",
+      capture: "/sounds/standard/Capture.mp3"
     };
     var other_sources = {
+      success: "/sounds/other/success.mp3",
+      error: "/sounds/other/error.mp3"
     };
     this.sounds = new Map();
 
@@ -657,10 +681,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js"); // required for sleep (https://github.com/babel/babel/issues/9849#issuecomment-487040428)
 
 
-var Chessground = __webpack_require__(/*! chessground */ "./node_modules/chessground/chessground.js").Chessground;
-
-var Chess = __webpack_require__(/*! chess.js */ "./node_modules/chess.js/chess.js");
-
 
 
 
@@ -674,21 +694,6 @@ function show_div(id) {
   }
 
   div.classList.remove("hidden");
-}
-
-function my_set_text(div, text) {
-  if (document.getElementById(div) != null) {
-    // if the div exists use it
-    Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(div, text);
-    return;
-  } // otherwise try to reuse the to_win div if it exists
-
-
-  var to_win = document.getElementById("to_win");
-
-  if (to_win != null) {
-    to_win.innerText = text;
-  }
 }
 
 function handle_move(_x, _x2, _x3) {
@@ -706,10 +711,12 @@ function _handle_move() {
             played = Object(_modules_chess_utils_js__WEBPACK_IMPORTED_MODULE_1__["uci_to_san"])(chess, orig, dest);
             target = to_play.shift();
             Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["clear_all_text"])();
-            my_set_text("to_win", " ");
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])("to_win", " "); // remove the iframe text
+
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])("bold_span", " ");
 
             if (!(played == target)) {
-              _context.next = 22;
+              _context.next = 24;
               break;
             }
 
@@ -717,48 +724,51 @@ function _handle_move() {
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_move"])(m, chess);
 
             if (!(to_play.length >= 2)) {
-              _context.next = 16;
+              _context.next = 18;
               break;
             }
 
-            _context.next = 10;
+            _context.next = 11;
             return Object(_modules_sleep_js__WEBPACK_IMPORTED_MODULE_3__["sleep"])(100);
 
-          case 10:
+          case 11:
             // instant play by the ai feels weird
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["info_div"], i18n.keep_going, {
+              symbol: "★",
+              bold: i18n.best_move
+            });
             ai_move = to_play.shift();
             _m = chess.move(ai_move);
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_set_moves"])();
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_move"])(_m, chess);
-            _context.next = 20;
-            my_set_text(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["success_div"], "Best Move! Keep going...");
+            _context.next = 22;
             break;
 
-          case 16:
+          case 18:
             // player got the puzzle correct
             solves = localStorage.getItem("achievements_tactics_solved") || 0;
             localStorage.setItem("achievements_tactics_solved", Number(solves) + 1);
-            my_set_text(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["success_div"], i18n.success);
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["success_div"], i18n.success);
             show_div("next");
 
-          case 20:
-            _context.next = 30;
+          case 22:
+            _context.next = 32;
             break;
 
-          case 22:
-            _context.next = 24;
+          case 24:
+            _context.next = 26;
             return Object(_modules_sleep_js__WEBPACK_IMPORTED_MODULE_3__["sleep"])(300);
 
-          case 24:
+          case 26:
             // instant play by the ai feels weird
             to_play.unshift(target);
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_undo_last_move"])();
             Object(_modules_ground_js__WEBPACK_IMPORTED_MODULE_0__["ground_set_moves"])();
-            my_set_text(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["error_div"], i18n.wrong_move);
+            Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["error_div"], i18n.wrong_move);
             show_div("next");
             show_div("solution");
 
-          case 30:
+          case 32:
           case "end":
             return _context.stop();
         }
@@ -785,9 +795,26 @@ function setup_last_move() {
  * re-evaluated by the browser resulting in old values being used.
  */
 
+
+function load_data() {
+  fen = document.getElementById("fen").value;
+  color = document.getElementById("color").value;
+  moves = document.getElementById("moves").value;
+  last_move = document.getElementById("last_move").value;
+}
+
+function show_which_side() {
+  var turn = color == "white" ? i18n.find_the_best_white : i18n.find_the_best_black;
+  Object(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["set_text"])(_modules_info_boxes_js__WEBPACK_IMPORTED_MODULE_2__["info_div"], turn, {
+    bold: i18n.your_turn,
+    symbol: "♔"
+  });
+}
+
 function main() {
+  load_data();
+  show_which_side();
   window.to_play = moves.split(" ");
-    console.log(fen);
 
   if (fen != old_fen) {
     // This is done to prevent flickering on the initial load of the
@@ -3303,7 +3330,7 @@ const util = __webpack_require__(/*! ./util */ "./node_modules/chessground/util.
 const draw_1 = __webpack_require__(/*! ./draw */ "./node_modules/chessground/draw.js");
 const anim_1 = __webpack_require__(/*! ./anim */ "./node_modules/chessground/anim.js");
 function start(s, e) {
-    if (e.button !== undefined && e.button !== 0)
+    if (!e.isTrusted || e.button !== undefined && e.button !== 0)
         return;
     if (e.touches && e.touches.length > 1)
         return;
@@ -4446,7 +4473,7 @@ exports.ranks = ['1', '2', '3', '4', '5', '6', '7', '8'];
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.computeSquareCenter = exports.createEl = exports.isRightButton = exports.eventPosition = exports.setVisible = exports.translateRel = exports.translateAbs = exports.posToTranslateRel = exports.posToTranslateAbs = exports.samePiece = exports.distanceSq = exports.opposite = exports.timer = exports.memo = exports.allPos = exports.key2pos = exports.pos2key = exports.allKeys = exports.invRanks = void 0;
 const cg = __webpack_require__(/*! ./types */ "./node_modules/chessground/types.js");
-exports.invRanks = ['8', '7', '6', '5', '4', '3', '2', '1'];
+exports.invRanks = [...cg.ranks].reverse();
 exports.allKeys = Array.prototype.concat(...cg.files.map(c => cg.ranks.map(r => c + r)));
 exports.pos2key = (pos) => exports.allKeys[8 * pos[0] + pos[1]];
 exports.key2pos = (k) => [k.charCodeAt(0) - 97, k.charCodeAt(1) - 49];
